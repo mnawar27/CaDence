@@ -93,12 +93,13 @@ spark = SparkSession \
     .builder \
     .appName('Table Processing') \
     .master('local[*]') \
-    .config("spark.driver.extraClassPath", "/Users/sjahan/Desktop/FinalProject/CaDence/mysql-connector-j-9.1.0/mysql-connector-j-9.1.0.jar") \
+    .config("spark.driver.extraClassPath", "/Users/mnawar/Desktop/passion/CaDence/mysql-connector-j-9.1.0/mysql-connector-j-9.1.0.jar") \
     .getOrCreate()
 # Dictionary mapping state abbreviations to full state names
 state_abbr_to_full = {
     "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado",
     "CT": "Connecticut", "DE": "Delaware", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho",
+    "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana",
     "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana",
     "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi",
     "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey",
@@ -176,10 +177,10 @@ def process_table(table_name):
     try:
         # Read data from the table
         df = spark.read.format("jdbc") \
-            .option("url", "jdbc:mysql://localhost/eventsim") \
+            .option("url", "jdbc:mysql://localhost/cadenceDB") \
             .option("driver", "com.mysql.cj.jdbc.Driver") \
             .option("dbtable", table_name) \
-            .option("user", "sharmin") \
+            .option("user", "mnawar") \
             .option("password", "thisistheway") \
             .load()
         # Add a time zone column based on the state column
@@ -223,7 +224,7 @@ def process_table(table_name):
     except Exception as e:
         print(f"Error processing table {table_name}: {e}")
         return None, None, None, None
-# Process all tables from group_1 to group_200 with a 2-second delay between each
+
 for i in range(186, 188):
     table_name = f"group_{i}"
     print(f"\nProcessing table: {table_name}")
@@ -248,5 +249,5 @@ for i in range(186, 188):
         user_counts_result.show()
     else:
         print(f"Skipped Distinct User Counts per Time Zone for {table_name} due to errors.")
-    # Add a 2-second delay between processing each table
+ 
     time.sleep(2)
