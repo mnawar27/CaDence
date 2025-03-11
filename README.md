@@ -7,3 +7,5 @@ CaDence delivers actionable insights by analyzing key user metrics such as subsc
 CaDence is scalable to meet the demands of a rapidly evolving industry—ensuring seamless performance even with massive data streams and new innovations.
 
 CaDence isn’t just about data—it’s about transforming it into actionable strategies that drive engagement and satisfaction.
+
+[Click here to check it out!](https://maisha-nawar-cadence.streamlit.app/)
