@@ -22,6 +22,31 @@ alt.themes.enable("dark")
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
+###################################################
+omega_raw = pd.read_json('data/omega_raw.json', lines=True)
+################################################### SIDEBAR FILTER LOGIC
+
+with st.sidebar:
+    st.image("/Users/mnawar/Desktop/passion/finalfinal/CaDence_nb.st_version/CaDence.png")
+    st.header('Time Zone and Week Controls')
+    ##### Defaults Below
+    present=['Present']
+    allPlaces=['EST','CST','MST','PST','HST']
+    ###### Button Select
+    sb_tz = st.multiselect("Select one or more options:",
+        ['EST','CST','MST','PST','HST'], key='time zone')
+    
+    all_options = st.button("Select all Time Zones")
+    if all_options:
+        sb_tz = allPlaces
+
+    st.header('Week')
+    sb_wk = st.multiselect("Choose a Week",['Present','Week 1','Week 2', 'Week 3','Week 4','Week 5'], key='option_2')
+    
+    all_options_w = st.button("Select all Weeks")
+    if all_options_w:
+        sb_wk = ['Week 1', 'Week 2', 'Week 3','Week 4','Week 5','Present']
+
 ################ Begin DF corelation to feed into Dashboard
     df_seled_wk =pd.DataFrame(columns=['artist', 'song','duration','ts','sessionId','level','state','userAgent','userId','firstName','gender','week','time_zone'])
 #### Have 'present as default
