@@ -237,3 +237,35 @@ def text_report(df_selected_week):
     durry=durry.round()
     st.markdown(f"{place_frag} {week_frag} acessed by {u_unique} unique users. Their combined listening duration {is_was} {durry} hours")
 
+#####################################################  Dashboard Main Panel
+############################################################################
+
+text_report(df_selected_week)
+col = st.columns((3, 5, 2), gap='medium') 
+
+# 1st Column - PLAN LEVEL, DEVICES, GENDER
+###################################################
+with col[0]:
+###################################################  
+##################################   PLAN LEVEL
+
+    with st.expander(r"$\textsf{\Large Paid vs Free}$",expanded=False):
+        level_chart = paid_level(df_selected_week)
+        if level_chart:
+            st.pyplot(level_chart)
+    
+        paidlev=df_selected_week.drop_duplicates(subset=['userId'])
+        paidlev=paidlev.groupby('week')['level'].value_counts()
+        paidlev=paidlev.reset_index()
+        paidlev.columns = ['Week', 'Level', 'Count']
+        st.dataframe(paidlev.set_index(paidlev.columns[0]))
+            
+
+######################################### DEVICES
+
+    with st.container(height=420,border=True):
+        donut = most_used_platform(df_selected_week)
+        st.plotly_chart(donut, use_container_width=True)
+
+    duration=duration(df_selected_week)
+    st.pyplot(plt)
