@@ -149,3 +149,64 @@ def most_played(df_selected_week):
     mps['Rank'] = mps.index + 1  
     mps = mps[['Rank', 'Song', 'Plays']]
     return mps
+
+################################################### ARTIST
+
+def most_played_artist(df_selected_week):
+    mpa=df_selected_week['artist'].value_counts()
+    wc = WordCloud(background_color='black', colormap='spring', width=800, height=400).generate_from_frequencies(mpa)
+    plt.figure(figsize=(10, 6))
+    plt.imshow(wc, interpolation='bilinear')
+    plt.axis("off")
+    st.pyplot(plt)
+################################################### DURATION
+
+def duration(df_selected_week):
+    if sb_tz==allPlaces:
+        label_tz="All Time Zones"
+    else:
+        label_tz=sb_tz
+    end=[]
+    chart_y=[]
+    for i in sb_wk:
+        chart_y.append(i)
+        total_dur=df_selected_week.loc[df_selected_week['week'] == i]
+        total_dur=total_dur.groupby('userId')['duration'].sum().sort_values(ascending=False)
+        total_dur=total_dur.reset_index(drop=False)
+        total_dur=total_dur['duration']//60
+        total_dur=total_dur[total_dur!=0]
+        end.append(total_dur)
+        
+    fig=plt.figure(figsize=(5,4))
+    fig.set_facecolor("black")
+    dur=plt.boxplot(end,notch=True,patch_artist=True)
+    labels = chart_y
+    plt.xticks(np.arange(1, len(end) + 1), labels)
+    colors = ['#fb449a', '#0035a7', '#fdbd0c', '#00d732', '#0073d7','#8600a7']
+    for patch, color in zip(dur['boxes'], colors):
+        patch.set_facecolor(color)
+    for median in dur['medians']:
+        median.set_color('white')
+    plt.title(f"Duration in Hours in {label_tz}")
+    return plt
+
+#################################################### TOP USERS
+
+def leader_board(df_selected_week):
+    top_boi=df_selected_week.groupby('userId')['duration']
+    top_boi=top_boi.sum().sort_values(ascending=False)
+    top_boi=top_boi//60
+    top_boi=top_boi.reset_index(drop=False)
+    top_boi=top_boi.head(6)
+    best_bois=top_boi['userId'].head(6)
+    best_bois=best_bois.reset_index(drop=False)
+    last_boi=[]
+    for i in best_bois['userId']:
+        big_boi_name=df_selected_week['firstName'].loc[df_selected_week['userId']==i].head(1)
+        big_boi_state=df_selected_week['state'].loc[df_selected_week['userId']==i].head(1)
+        big_boi_listen=top_boi['duration'].loc[top_boi['userId']==i]
+        lb_boi=pd.DataFrame({'User Id': [i], 'Name': [big_boi_name.iloc[0]], 'State': [big_boi_state.iloc[0]], 'Hours': [big_boi_listen.iloc[0]]})
+        last_boi.append(lb_boi)
+    boss_boi = pd.concat(last_boi, ignore_index=True)
+    return boss_boi
+
