@@ -142,3 +142,10 @@ def get_gender(df_selected_week):
     yellow_patch = mpatches.Patch(color='#fdbd0c', label='Other')
     plt.legend(handles=[blue_patch,pink_patch,yellow_patch])
     return plt
+
+def most_played(df_selected_week):
+    mps=df_selected_week['song'].value_counts().nlargest(10).reset_index()
+    mps.columns = ['Song', 'Plays']  
+    mps['Rank'] = mps.index + 1  
+    mps = mps[['Rank', 'Song', 'Plays']]
+    return mps
