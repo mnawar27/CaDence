@@ -269,3 +269,36 @@ with col[0]:
 
     duration=duration(df_selected_week)
     st.pyplot(plt)
+
+#2nd Column - USER MAP, TOP ARTIST
+###########################################################################
+with col[1]:
+##########################################################################
+##################################################### USER MAP
+
+    with st.container(height=400,border=True):
+        get_state_count = get_state_count(df_selected_week)
+
+        if get_state_count:
+            st.plotly_chart(get_state_count)
+
+##################################################### TOP ARTIST
+
+    wordcloud_chart = most_played_artist(df_selected_week)
+    if wordcloud_chart:
+        st.pyplot(plt)
+    with st.expander(r"$\textsf{\Large Artist Play Counts}$",expanded=False):
+        mpa=df_selected_week['artist'].value_counts()
+        mpa=mpa.sort_values(ascending=False).reset_index(drop=False)
+        st.dataframe(mpa.set_index(mpa.columns[0]),use_container_width=True)
+
+######################################################### GENDER
+    with st.expander(r"$\textsf{\Large Gender Counts}$",expanded=False):
+        gender_chart = get_gender(df_selected_week)
+        st.pyplot(gender_chart)
+        gender_dfsum = df_selected_week.drop_duplicates(subset=['userId'])
+    ###### Step two: Now that userId is taken care of, we can agg between just week and gender
+        gender_dfsum = gender_dfsum.groupby('week')['gender'].value_counts()
+        gender_dfsum=gender_dfsum.reset_index()
+        st.dataframe(gender_dfsum.set_index(gender_dfsum.columns[0]),use_container_width=True)
+##### (TBA)
