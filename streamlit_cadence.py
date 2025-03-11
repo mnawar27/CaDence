@@ -210,3 +210,30 @@ def leader_board(df_selected_week):
     boss_boi = pd.concat(last_boi, ignore_index=True)
     return boss_boi
 
+##################################################### FORMAT TOP TEXT REPORT
+
+def text_report(df_selected_week):
+    label_tz = ", ".join(df_selected_week['time_zone'].unique())
+    label_wk = ", ".join(df_selected_week['week'].unique())
+    if sb_wk == present:
+        week_frag = "ZipSpontify is currently being"
+        is_was="is"
+    else:
+        week_frag = f"during {label_wk} ZipSpontify was"
+        is_was="was"
+    if sb_wk == ['Week 1','Week 2','Week 3','Week 4','Week 5','Present']:
+        week_frag= "during the entire six week campaign, ZipSpontify was"
+    if sb_tz == allPlaces:
+        place_frag= f"In all time zones"
+    elif len(sb_tz)==1:
+        place_frag=f"For time zone {label_tz}"
+    else:
+        place_frag=f"For time zones {label_tz}"
+    
+    u_unique=df_selected_week['userId'].nunique()
+    topSong=df_selected_week['song'].value_counts().head(1)
+    topSong=topSong.to_string()
+    durry=df_selected_week['duration'].sum()//60
+    durry=durry.round()
+    st.markdown(f"{place_frag} {week_frag} acessed by {u_unique} unique users. Their combined listening duration {is_was} {durry} hours")
+
