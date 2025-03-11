@@ -23,12 +23,19 @@ The dashboard allows users to filter data by week or timezone and analyze trends
 
 # Technologies Used
 • Python (Pandas, NumPy): Data cleaning, transformation, and analysis.
+
 • Google Colab: Interactive development and data experimentation.
+
 • Matplotlib, Plotly: Data visualization and trend analysis.
+
 • Streamlit: Web-based interactive dashboard for real-time insights.
+
 • EventSim: Simulated event data generation for testing at scale.
+
 • Apache Kafka: Distributed event streaming platform used to handle real-time data ingestion, ensuring high throughput and fault tolerance.
+
 • Apache Spark: Distributed data processing engine for real-time analytics, enabling the processing of large-scale streaming data with low latency.
+
 
 # Key Features & Insights
 CaDence provides an intuitive, interactive dashboard with real-time insights:
