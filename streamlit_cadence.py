@@ -87,3 +87,26 @@ def most_used_platform(df_selected_week):
     fig.update_traces(textinfo='percent+label')
     fig.update_layout(showlegend=False, font_size=15, height=380,width=100,title=dict(text=f"Devices Used in {label_tz}",font=dict(size=20)))
     return fig
+
+################################################### USER COUNT MAP
+
+def get_state_count(omega_raw, time_zone='All', week='All'):
+    df = omega_raw.copy()
+    if time_zone != 'All': df = df[df['time_zone'] == time_zone]
+    if week != 'All': df = df[df['week'] == week]
+
+    groupby_cols = ['state', 'time_zone'] if week == 'All' else ['state', 'time_zone', 'week']
+    state_count = df.groupby(groupby_cols)['userId'].nunique().reset_index()
+
+    state_count.columns = ['State', 'Time Zone', 'User Count'] if week == 'All' else ['State', 'Time Zone', 'Week', 'User Count']
+    fig = px.choropleth(state_count, locations='State', locationmode='USA-states', color='User Count',
+                        hover_name='State', color_continuous_scale="plasma")
+    fig.update_layout(mapbox_zoom=9,
+    title={
+        'text': "Users Per State",
+        'x': 0.5,  
+        'xanchor': 'center',  
+        'font_size':25
+    })
+    fig.update_geos(visible=True, showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="lightgray", projection_type="albers usa",bgcolor='black')
+    return fig
