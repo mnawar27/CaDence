@@ -67,3 +67,23 @@ with open('style.css') as f:
         blue_patch = mpatches.Patch(color='#0073d7', label='Free')
         plt.legend(handles=[blue_patch,pink_patch])  
         return plt
+
+################################################### DEVICES 
+
+def most_used_platform(df_selected_week):
+    platform=df_selected_week.groupby('userId')['userAgent'].first().value_counts()
+    # label_tz = ", ".join(df_selected_week['time_zone'].unique())
+    if sb_tz==allPlaces:
+        label_tz="All Time Zones"
+    else:
+        label_tz=sb_tz
+    ##Donut Chart
+    fig = px.pie(platform, names=platform.index,values=platform, hole=.6,color='count',
+                color_discrete_map={'Windows':'#dc14c5',
+                                    'Mac':'#d84f9e',
+                                    'Linux':'#7f43ac',
+                                    'iPhone':'#3c34bc',
+                                    'iPad':'#1eb75c'})
+    fig.update_traces(textinfo='percent+label')
+    fig.update_layout(showlegend=False, font_size=15, height=380,width=100,title=dict(text=f"Devices Used in {label_tz}",font=dict(size=20)))
+    return fig
