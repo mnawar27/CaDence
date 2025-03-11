@@ -110,3 +110,35 @@ def get_state_count(omega_raw, time_zone='All', week='All'):
     })
     fig.update_geos(visible=True, showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="lightgray", projection_type="albers usa",bgcolor='black')
     return fig
+
+################################################### GENDER
+
+def get_gender(df_selected_week):
+    ###### Step one: drop dups since we only want to count users once
+    gender_df = df_selected_week.drop_duplicates(subset=['userId'])
+    ###### Step two: Now that userId is taken care of, we can agg between just week and gender
+    gender_df = gender_df.groupby('week')['gender'].value_counts()
+    gender_df=gender_df.reset_index()
+    ###### Chart starts now
+    height=gender_df['count']
+    plt.figure(facecolor="black")
+    b_colors={'M':'#0035a7','F':'#fb449a','Other':'#fdbd0c'}
+    colors=[b_colors[i] for i in gender_df['gender']]
+    plt.bar (gender_df['week'],height,color=colors,width=0.5)
+    if sb_tz==allPlaces:
+        t_tz="all Time Zones"
+    else:t_tz=sb_tz
+    plt.title(f"Gender Counts in {t_tz}")
+    # plt.figure(figsize=(4,6)) 
+    ax = plt.gca()  
+    ax.set_facecolor("black")
+    ax.spines['bottom'].set_color('#fbfbfb80')
+    ax.spines['left'].set_color('#fbfbfb80')
+    ax.xaxis.label.set_color('#fbfbfb80')
+    ax.tick_params(axis='x', colors='white')
+    ax.tick_params(axis='y', colors='white')
+    pink_patch = mpatches.Patch(color='#fb449a', label='Female')
+    blue_patch = mpatches.Patch(color='#0035a7', label='Male')
+    yellow_patch = mpatches.Patch(color='#fdbd0c', label='Other')
+    plt.legend(handles=[blue_patch,pink_patch,yellow_patch])
+    return plt
