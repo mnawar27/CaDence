@@ -301,4 +301,24 @@ with col[1]:
         gender_dfsum = gender_dfsum.groupby('week')['gender'].value_counts()
         gender_dfsum=gender_dfsum.reset_index()
         st.dataframe(gender_dfsum.set_index(gender_dfsum.columns[0]),use_container_width=True)
-##### (TBA)
+#####
+
+##########################################################################    
+#3rd Column - TOP 10 SONGS, TOP USERS
+##########################################################################
+with col[2]:
+##########################################################################
+##################################################### TOP SONGS
+
+    st.markdown('#### Most Played Songs')
+    most_played_songs = most_played(df_selected_week)
+
+    if most_played_songs is not None:
+        st.dataframe(most_played_songs.set_index(most_played_songs.columns[0]), width=300)
+        
+##################################################### TOP USERS
+    st.markdown('#### Top Users')
+    leader_board = leader_board(df_selected_week)
+
+    if leader_board is not None:
+        st.dataframe(leader_board.set_index(leader_board.columns[0]), width=300)
